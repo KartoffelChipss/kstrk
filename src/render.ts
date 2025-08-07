@@ -1,6 +1,6 @@
 import { getInitialWords, getRandomWord } from './words.js';
 import { CLEAR_SCREEN, RESET, BOLD, nameToAnsi } from './util/ansi.js';
-import { TypedStats } from './statsCollector.js';
+import { TypedStats } from './stats.js';
 import { parseConfig } from './util/config.js';
 
 const words: string[] = [];

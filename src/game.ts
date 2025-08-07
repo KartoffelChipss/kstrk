@@ -1,17 +1,12 @@
 import { Command } from 'commander';
 import { calculateTypedStats, handleKeypress, render } from './render.js';
 import { CLEAR_SCREEN, GREEN } from './util/ansi.js';
-import { calculateStats, TypedStats } from './statsCollector.js';
+import { calculateStats, displayTypingStats, TypedStats } from './stats.js';
 
 function onFinish(typedStats: TypedStats, timeInSeconds: number) {
     const stats = calculateStats(typedStats, timeInSeconds);
     process.stdout.write(CLEAR_SCREEN);
-
-    process.stdout.write(
-        `\n${GREEN}WPM: ${stats.wpm} | Raw WPM: ${stats.rawWpm} | Accuracy: ${stats.accuracy}% | Time Spent: ${timeInSeconds}s | Errors: ${stats.errors}\n`
-    );
-
-    process.stdout.write(GREEN + '-> Done!\n');
+    displayTypingStats(stats);
     process.exit();
 }
 
