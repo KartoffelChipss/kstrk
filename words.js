@@ -11,7 +11,7 @@ const wordsList = wordsContent
     .filter(word => word.length > 0)
     .map(word => word.trim());
 
-const getInitialWords = (count = 15) => {
+const getInitialWords = (count = 50) => {
     return wordsList
         .sort(() => Math.random() - 0.5)
         .slice(0, count);
