@@ -1,5 +1,6 @@
 import { getInitialWords, getRandomWord } from './words';
 import { WHITE, GRAY, RED, ORANGE, CLEAR_SCREEN, RESET, BOLD } from './ansi';
+import { TypedStats } from './statsCollector';
 
 const words = getInitialWords();
 
@@ -129,7 +130,33 @@ export function render(secondsRemaining: number) {
     process.stdout.write(`\x1b[${finalCursorRow};${finalCursorCol}H`);
 }
 
-function finalizeCurrentWord(onFinish: () => void) {
+export function calculateTypedStats(): TypedStats {
+    let correctlyTyped = 0;
+    let totalTyped = 0;
+
+    // Only consider words up to and including the current word index
+    for (let i = 0; i <= currentWordIndex && i < words.length; i++) {
+        const targetWord = words[i];
+        const userWord =
+            i < lockedWords.length
+                ? lockedWords[i]
+                : i === currentWordIndex
+                  ? currentInput
+                  : '';
+
+        for (let j = 0; j < targetWord.length; j++) {
+            totalTyped++; // Count every target character of typed or current word
+
+            if (userWord[j] === targetWord[j]) {
+                correctlyTyped++;
+            }
+        }
+    }
+
+    return { correctlyTyped, totalTyped };
+}
+
+function finalizeCurrentWord(onFinish: (typedStats: TypedStats) => void) {
     if (currentInput.length > 0) {
         lockedWords.push(currentInput);
         currentInput = '';
@@ -140,31 +167,37 @@ function finalizeCurrentWord(onFinish: () => void) {
         // If done with all words
         if (currentWordIndex >= words.length) {
             render(0);
-            onFinish();
+            onFinish(calculateTypedStats());
         }
     }
 }
 
 export function handleKeypress(
     chunk: Buffer,
-    onFinish: () => void,
-    timeRemaining: number
+    onFinish: (typedStats: TypedStats) => void,
+    timeRemaining: number,
+    startTimer?: () => void // new optional callback
 ) {
     const key = chunk.toString();
 
+    // Start timer on first printable keypress
+    if (startTimer && /^[ -~]$/.test(key)) {
+        startTimer();
+    }
+
     if (key === '\u0004') {
         // Ctrl+D
-        onFinish();
+        onFinish(calculateTypedStats());
     } else if (key === '\u0003') {
         // Ctrl+C
-        onFinish();
+        onFinish(calculateTypedStats());
     } else if (key === '\u007F') {
         // Backspace
         if (currentInput.length > 0) {
             currentInput = currentInput.slice(0, -1);
         }
     } else if (key === ' ' || key === '\n' || key === '\r') {
-        // Space key or Enter key
+        // Space or Enter key
         finalizeCurrentWord(onFinish);
     } else if (/^[ -~]$/.test(key)) {
         // Regular printable characters
