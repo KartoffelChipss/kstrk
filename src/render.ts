@@ -1,5 +1,5 @@
 import { getInitialWords, getRandomWord } from './words';
-import { WHITE, GRAY, RED, ORANGE, CLEAR, RESET, BOLD } from './ansi';
+import { WHITE, GRAY, RED, ORANGE, CLEAR_SCREEN, RESET, BOLD } from './ansi';
 
 const words = getInitialWords();
 
@@ -10,7 +10,7 @@ let lockedWords: string[] = [];
 export function render(secondsRemaining: number) {
     const termWidth = process.stdout.columns || 80;
     const termHeight = process.stdout.rows || 24;
-    process.stdout.write(CLEAR);
+    process.stdout.write(CLEAR_SCREEN);
 
     let lines: string[] = [];
     let currentLine = '';
@@ -96,7 +96,7 @@ export function render(secondsRemaining: number) {
         );
         const timerSpacer = ' '.repeat(timerPadding);
         process.stdout.write(
-            `${timerSpacer}${BOLD + WHITE}${timerText}${RESET}\n`
+            timerSpacer + BOLD + WHITE + timerText + RESET + '\n'
         );
 
         // Blank line after timer

@@ -1,5 +1,5 @@
 import { render, handleKeypress } from './render';
-import { CLEAR, GREEN } from './ansi';
+import { CLEAR_SCREEN, GREEN } from './ansi';
 import { Command } from 'commander';
 import helpConfig from './util/helpConfig';
 
@@ -17,9 +17,20 @@ program
     .action(init);
 
 function onFinish() {
-    process.stdout.write(CLEAR);
+    process.stdout.write('\x07');
+    process.stdout.write(CLEAR_SCREEN);
     process.stdout.write(GREEN + '-> Done!\n');
     process.exit();
+}
+
+function ha() {
+    const frames = ['-', '\\', '|', '/'];
+    let i = 0;
+
+    setInterval(() => {
+        process.stdout.write('\x1b[0G' + frames[i % frames.length]); // Move to start of line
+        i++;
+    }, 100);
 }
 
 function init() {
@@ -39,7 +50,7 @@ function init() {
         }, 1000);
     }
 
-    process.stdout.write(CLEAR);
+    process.stdout.write(CLEAR_SCREEN);
     render(timeRemaining);
 
     process.stdin.setRawMode(true);
