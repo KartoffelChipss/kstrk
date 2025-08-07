@@ -6,9 +6,11 @@ import {
     ORANGE,
     CLEAR_SCREEN,
     RESET,
-    BOLD
+    BOLD,
+    nameToAnsi
 } from './util/ansi';
 import { TypedStats } from './statsCollector';
+import { parseConfig } from './util/config';
 
 const words: string[] = [];
 
@@ -18,6 +20,8 @@ let lockedWords: string[] = [];
 
 export function render(secondsRemaining: number) {
     if (words.length === 0) words.push(...getInitialWords());
+
+    const config = parseConfig();
 
     const termWidth = process.stdout.columns || 80;
     const termHeight = process.stdout.rows || 24;
@@ -48,9 +52,13 @@ export function render(secondsRemaining: number) {
 
             if (j < userInput.length) {
                 const correct = userInput[j] === char;
-                color = correct ? WHITE : RED;
+                color = correct
+                    ? nameToAnsi(config.text.correct_color)
+                    : nameToAnsi(config.text.incorrect_color);
             } else {
-                color = isLocked ? ORANGE : GRAY;
+                color = isLocked
+                    ? nameToAnsi(config.text.skipped_color)
+                    : nameToAnsi(config.text.text_color);
             }
 
             wordOutput += color + char;
@@ -85,7 +93,8 @@ export function render(secondsRemaining: number) {
     const displayLines = lines.slice(startLine, startLine + 3);
 
     // Total block height: 3 lines + (optional 2 lines for timer)
-    const extraLines = isFinite(secondsRemaining) ? 2 : 0;
+    const extraLines =
+        isFinite(secondsRemaining) && config.timer.show_timer ? 2 : 0;
     const totalBlockLines = displayLines.length + extraLines;
 
     const verticalPadding = Math.max(
@@ -99,15 +108,20 @@ export function render(secondsRemaining: number) {
     }
 
     // Render the timer if not Infinity
-    if (isFinite(secondsRemaining)) {
-        const timerText = `⏱ ${secondsRemaining}s`;
+    if (isFinite(secondsRemaining) && config.timer.show_timer) {
+        const timerText = `${config.timer.timer_icon} ${secondsRemaining}s`;
         const timerPadding = Math.max(
             0,
             Math.floor((termWidth - timerText.length) / 2)
         );
         const timerSpacer = ' '.repeat(timerPadding);
         process.stdout.write(
-            timerSpacer + BOLD + WHITE + timerText + RESET + '\n'
+            timerSpacer +
+                BOLD +
+                nameToAnsi(config.timer.timer_color) +
+                timerText +
+                RESET +
+                '\n'
         );
 
         // Blank line after timer
