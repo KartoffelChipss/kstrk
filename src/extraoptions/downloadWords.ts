@@ -1,5 +1,5 @@
 import ora from 'ora';
-import { wordsFilePath } from '../util/paths';
+import { wordsFilePath } from '../util/paths.js';
 import fs from 'fs';
 import path from 'path';
 import { Readable } from 'stream';

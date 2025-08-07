@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { wordsFilePath } from './util/paths';
-import { RED } from './util/ansi';
+import { wordsFilePath } from './util/paths.js';
+import { RED } from './util/ansi.js';
 
 const fetchWordsList = (): string[] => {
     if (!fs.existsSync(wordsFilePath)) {

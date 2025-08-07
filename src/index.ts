@@ -1,8 +1,8 @@
 import { Command } from 'commander';
-import helpConfig from './util/helpConfig';
-import { startGame } from './game';
-import downloadWords from './extraoptions/downloadWords';
-import { configFilePath } from './util/paths';
+import helpConfig from './util/helpConfig.js';
+import { startGame } from './game.js';
+import downloadWords from './extraoptions/downloadWords.js';
+import { configFilePath } from './util/paths.js';
 
 const VERSION = '1.0.0';
 

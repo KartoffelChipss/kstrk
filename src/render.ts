@@ -1,16 +1,7 @@
-import { getInitialWords, getRandomWord } from './words';
-import {
-    WHITE,
-    GRAY,
-    RED,
-    ORANGE,
-    CLEAR_SCREEN,
-    RESET,
-    BOLD,
-    nameToAnsi
-} from './util/ansi';
-import { TypedStats } from './statsCollector';
-import { parseConfig } from './util/config';
+import { getInitialWords, getRandomWord } from './words.js';
+import { CLEAR_SCREEN, RESET, BOLD, nameToAnsi } from './util/ansi.js';
+import { TypedStats } from './statsCollector.js';
+import { parseConfig } from './util/config.js';
 
 const words: string[] = [];
 

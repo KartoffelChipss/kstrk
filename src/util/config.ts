@@ -1,6 +1,6 @@
 import toml from 'toml';
-import { configFilePath } from './paths';
 import fs from 'fs';
+import { configFilePath } from './paths.js';
 
 export const DEFAULT_CONFIG_CONTENT = `[general]
 # Set the default seconds for the game

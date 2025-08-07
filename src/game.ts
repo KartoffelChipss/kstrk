@@ -1,7 +1,7 @@
 import { Command } from 'commander';
-import { calculateTypedStats, handleKeypress, render } from './render';
-import { CLEAR_SCREEN, GREEN } from './util/ansi';
-import { calculateStats, TypedStats } from './statsCollector';
+import { calculateTypedStats, handleKeypress, render } from './render.js';
+import { CLEAR_SCREEN, GREEN } from './util/ansi.js';
+import { calculateStats, TypedStats } from './statsCollector.js';
 
 function onFinish(typedStats: TypedStats, timeInSeconds: number) {
     const stats = calculateStats(typedStats, timeInSeconds);

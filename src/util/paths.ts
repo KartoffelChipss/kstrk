@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import envPaths from 'env-paths';
-import { DEFAULT_CONFIG_CONTENT } from './config';
+import { DEFAULT_CONFIG_CONTENT } from './config.js';
 
 const paths = envPaths('kstrk', { suffix: '' });
 
