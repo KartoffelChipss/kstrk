@@ -20,10 +20,13 @@ program
     )
     .option('--download-words', 'Download a words file automatically')
     .option('--config', 'Show the configuration file path')
-    .action(async () => {
+    .action(async (): Promise<void> => {
         const opts = program.opts();
         if (opts.downloadWords) return downloadWords();
-        if (opts.config) return console.log(configFilePath);
+        if (opts.config) {
+            process.stdout.write(configFilePath + '\n');
+            return;
+        }
 
         startGame(program);
     });
