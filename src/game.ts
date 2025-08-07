@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { calculateTypedStats, handleKeypress, render } from './render';
-import { CLEAR_SCREEN, GREEN } from './ansi';
+import { CLEAR_SCREEN, GREEN } from './util/ansi';
 import { calculateStats, TypedStats } from './statsCollector';
 
 function onFinish(typedStats: TypedStats, timeInSeconds: number) {

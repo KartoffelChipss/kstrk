@@ -1,14 +1,24 @@
 import { getInitialWords, getRandomWord } from './words';
-import { WHITE, GRAY, RED, ORANGE, CLEAR_SCREEN, RESET, BOLD } from './ansi';
+import {
+    WHITE,
+    GRAY,
+    RED,
+    ORANGE,
+    CLEAR_SCREEN,
+    RESET,
+    BOLD
+} from './util/ansi';
 import { TypedStats } from './statsCollector';
 
-const words = getInitialWords();
+const words: string[] = [];
 
 let currentWordIndex: number = 0;
 let currentInput: string = '';
 let lockedWords: string[] = [];
 
 export function render(secondsRemaining: number) {
+    if (words.length === 0) words.push(...getInitialWords());
+
     const termWidth = process.stdout.columns || 80;
     const termHeight = process.stdout.rows || 24;
     process.stdout.write(CLEAR_SCREEN);

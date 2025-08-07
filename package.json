@@ -21,8 +21,10 @@
   },
   "dependencies": {
     "commander": "^13.0.0-0",
+    "env-paths": "^3.0.0",
     "inquirer": "^12.2.0",
-    "ora": "^8.1.1"
+    "ora": "^8.2.0",
+    "toml": "^3.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
