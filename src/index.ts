@@ -1,10 +1,12 @@
+#!/usr/bin/env node
+
 import { Command } from 'commander';
 import helpConfig from './util/helpConfig.js';
 import { startGame } from './game.js';
 import downloadWords from './extraoptions/downloadWords.js';
 import { configFilePath } from './util/paths.js';
 
-const VERSION = '1.0.0';
+const VERSION = '1.0.1';
 
 const program = new Command();
 
