@@ -13,6 +13,9 @@ export const CLEAR_SCREEN = '\x1b[2J\x1b[H';
 export const BOLD = '\x1b[1m';
 export const BEEP = '\x07';
 
+export const ALT_BUFFER_ON = '\x1b[?1049h';
+export const ALT_BUFFER_OFF = '\x1b[?1049l';
+
 export const nameToAnsi = (name: string): string => {
     switch (name.toLowerCase()) {
         case 'reset':
@@ -42,3 +45,4 @@ export const nameToAnsi = (name: string): string => {
             throw new Error(`Unknown ANSI color name: ${name}`);
     }
 };
+

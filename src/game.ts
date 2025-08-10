@@ -1,11 +1,22 @@
 import { Command } from 'commander';
 import { calculateTypedStats, handleKeypress, render } from './render.js';
-import { CLEAR_SCREEN } from './util/ansi.js';
+import { CLEAR_SCREEN, ALT_BUFFER_ON, ALT_BUFFER_OFF } from './util/ansi.js';
 import { calculateStats, displayTypingStats, TypedStats } from './stats.js';
+
+function enterAltBuffer() {
+    process.stdout.write(ALT_BUFFER_ON);
+    process.stdout.write('\x1b[H');}
+
+function leaveAltBuffer() {
+    process.stdout.write(ALT_BUFFER_OFF);
+}
 
 function onFinish(typedStats: TypedStats, timeInSeconds: number) {
     const stats = calculateStats(typedStats, timeInSeconds);
-    process.stdout.write(CLEAR_SCREEN);
+
+    leaveAltBuffer();
+
+    console.log();
     displayTypingStats(stats);
     process.exit();
 }
@@ -37,6 +48,8 @@ export function startGame(program: Command) {
     const getTimeRemaining = () =>
         options.infinite ? Infinity : maxTime - timeSpent;
 
+    enterAltBuffer();
+
     process.stdout.write(CLEAR_SCREEN);
     render(getTimeRemaining());
 
@@ -48,7 +61,7 @@ export function startGame(program: Command) {
             chunk,
             (typedStats) => {
                 if (timerInterval) clearInterval(timerInterval);
-                onFinish(typedStats, timeSpent || 1); // use at least 1 second
+                onFinish(typedStats, timeSpent || 1);
             },
             getTimeRemaining(),
             startTimer
@@ -58,4 +71,10 @@ export function startGame(program: Command) {
     process.on('SIGWINCH', () => {
         render(getTimeRemaining());
     });
+
+    process.on('SIGINT', () => {
+        leaveAltBuffer();
+        process.exit();
+    });
 }
+
